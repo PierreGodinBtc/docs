@@ -1,0 +1,326 @@
+---
+title: 'Button'
+description: 'A versatile button component with multiple interaction states'
+---
+
+{/* 
+  FIGMA TRACKING: https://www.figma.com/design/osmWFSHFDtSucVo3xwmk0I/Test-mintlify?node-id=1-5
+  Frame ID: 1:5
+  Last Updated: 2025-10-17
+  Automated sync enabled - Weekly check for design changes
+*/}
+
+## Overview
+
+The Button component is a fundamental interactive element used throughout the application. It provides clear visual feedback across different interaction states to ensure users understand when they can interact with elements.
+
+### When to Use
+
+- **Primary actions**: Use for the main call-to-action in a section or page
+- **Form submissions**: Ideal for submit, save, or confirm actions
+- **Navigation triggers**: When users need to move to the next step or page
+- **Action confirmations**: For confirming or canceling operations
+
+### When Not to Use
+
+- **Navigation links**: Use anchor tags for standard navigation
+- **Toggle actions**: Consider toggle switches for on/off states
+- **Multiple selections**: Use checkboxes or radio buttons instead
+
+---
+
+## Variants & States
+
+The Button component includes three interaction states:
+
+### Default State
+- **Component ID**: `1:4`
+- **Description**: The resting state when the button is not being interacted with
+- **Visual**: Standard button appearance with primary color
+
+### Hover State
+- **Component ID**: `1:6`
+- **Description**: Appears when the user's cursor is over the button
+- **Visual**: Provides visual feedback to indicate the button is interactive
+
+### Pressed State
+- **Component ID**: `1:8`
+- **Description**: Active state when the button is being clicked
+- **Visual**: Darker appearance to show the button is being pressed
+
+---
+
+## Specifications
+
+### Dimensions
+- **Width**: 59px
+- **Height**: 31px
+- **Border radius**: Rounded corners for modern appearance
+
+### Typography
+- **Font family**: Inter
+- **Font weight**: Medium (500)
+- **Font size**: 12px
+- **Line height**: Normal
+- **Text color**: White (#FFFFFF)
+- **Text transform**: None
+
+### Spacing
+- **Internal padding**: Optimized for 12px font size
+- **Text alignment**: Center
+- **Vertical alignment**: Middle
+
+### Colors & Tokens
+
+#### Default State
+- **Background**: Primary blue
+- **Text**: `#FFFFFF` (white)
+- **Border**: None
+
+#### Hover State
+- **Background**: Slightly lighter/darker primary blue (interactive feedback)
+- **Text**: `#FFFFFF` (white)
+- **Border**: None
+
+#### Pressed State
+- **Background**: Darker primary blue (active feedback)
+- **Text**: `#FFFFFF` (white)
+- **Border**: None
+
+### Design Tokens
+```json
+{
+  "button": {
+    "typography": {
+      "fontFamily": "Inter",
+      "fontWeight": "500",
+      "fontSize": "12px",
+      "lineHeight": "normal",
+      "color": "#FFFFFF"
+    },
+    "dimensions": {
+      "minWidth": "59px",
+      "height": "31px"
+    },
+    "spacing": {
+      "paddingInline": "auto",
+      "paddingBlock": "auto"
+    }
+  }
+}
+```
+
+---
+
+## Accessibility Requirements
+
+### Keyboard Navigation
+- **Tab**: Should be focusable in the natural tab order
+- **Enter/Space**: Should trigger the button action
+- **Focus indicator**: Must have visible focus ring for keyboard users
+
+### Screen Readers
+- **Label**: Always provide descriptive text content
+- **Role**: Use semantic `<button>` element (role="button" is implicit)
+- **State**: Communicate disabled state with `aria-disabled` when applicable
+
+### ARIA Attributes
+```html
+<!-- Basic button -->
+<button type="button">Button</button>
+
+<!-- Button with icon only -->
+<button type="button" aria-label="Close dialog">
+  <CloseIcon />
+</button>
+
+<!-- Disabled button -->
+<button type="button" disabled aria-disabled="true">
+  Button
+</button>
+
+<!-- Loading state -->
+<button type="button" aria-busy="true" disabled>
+  Loading...
+</button>
+```
+
+### Color Contrast
+- **Text contrast ratio**: Minimum 4.5:1 (WCAG AA)
+- **Focus indicator**: Minimum 3:1 contrast ratio
+- **Interactive states**: Clear visual distinction between states
+
+### Touch Targets
+- **Minimum size**: 44x44px for mobile touch targets (current size may need adjustment)
+- **Spacing**: Minimum 8px between adjacent interactive elements
+
+---
+
+## Usage Examples
+
+### Basic Usage
+
+<CodeGroup>
+
+```tsx React
+import Button from './components/Button';
+
+export default function Example() {
+  return (
+    <Button 
+      text="Click me" 
+      onClick={() => console.log('Clicked!')}
+    />
+  );
+}
+```
+
+```tsx TypeScript
+interface ButtonProps {
+  className?: string;
+  hasLeadingIcon?: boolean;
+  hasTrailingIcon?: boolean;
+  text?: string;
+  state?: "Default" | "Hover" | "Pressed";
+  onClick?: () => void;
+}
+
+function Button({ 
+  className, 
+  text = "Button", 
+  state = "Default",
+  onClick 
+}: ButtonProps) {
+  const element = (
+    <p className="font-['Inter:Medium',_sans-serif] font-medium leading-[normal] not-italic relative shrink-0 text-[12px] text-white">
+      {text}
+    </p>
+  );
+  
+  return (
+    <button 
+      className={className} 
+      onClick={onClick}
+      data-state={state}
+    >
+      {element}
+    </button>
+  );
+}
+```
+
+```html HTML
+<button type="button" class="btn btn-primary">
+  Button
+</button>
+```
+
+</CodeGroup>
+
+### With Icons
+
+```tsx
+<Button 
+  text="Save" 
+  hasLeadingIcon={true}
+  icon={<SaveIcon />}
+/>
+```
+
+### Form Submission
+
+```tsx
+<form onSubmit={handleSubmit}>
+  <input type="text" name="email" />
+  <Button 
+    text="Submit" 
+    type="submit"
+  />
+</form>
+```
+
+### Disabled State
+
+```tsx
+<Button 
+  text="Submit" 
+  disabled={!isFormValid}
+  aria-disabled={!isFormValid}
+/>
+```
+
+### Loading State
+
+```tsx
+<Button 
+  text={isLoading ? "Loading..." : "Submit"}
+  disabled={isLoading}
+  aria-busy={isLoading}
+/>
+```
+
+---
+
+## Best Practices
+
+### Do's ✅
+- Use clear, action-oriented text (e.g., "Save changes" not "OK")
+- Provide visual feedback for all interaction states
+- Ensure sufficient color contrast for accessibility
+- Use consistent button styling across the application
+- Make buttons easily tappable on mobile (44x44px minimum)
+
+### Don'ts ❌
+- Don't use vague labels like "Click here" or "Submit"
+- Don't rely solely on color to convey meaning
+- Don't nest buttons inside other interactive elements
+- Don't make buttons too small for comfortable interaction
+- Don't forget to handle loading and error states
+
+---
+
+## Implementation Notes
+
+### Component Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `text` | `string` | `"Button"` | The text content of the button |
+| `state` | `"Default" \| "Hover" \| "Pressed"` | `"Default"` | The visual state of the button |
+| `className` | `string` | `undefined` | Additional CSS classes |
+| `hasLeadingIcon` | `boolean` | `false` | Whether to show an icon before text |
+| `hasTrailingIcon` | `boolean` | `false` | Whether to show an icon after text |
+| `onClick` | `() => void` | `undefined` | Click event handler |
+| `disabled` | `boolean` | `false` | Whether the button is disabled |
+| `type` | `"button" \| "submit" \| "reset"` | `"button"` | The button type |
+
+### Responsive Behavior
+- Buttons should maintain minimum touch target size on mobile devices
+- Consider full-width buttons on small screens for important actions
+- Ensure text doesn't overflow - use ellipsis or wrap appropriately
+
+---
+
+## Related Components
+
+- **Icon Button**: For buttons with only an icon
+- **Link Button**: For buttons styled as links
+- **Button Group**: For grouping related buttons together
+
+---
+
+## Changelog
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | 2025-10-17 | Initial documentation with three states (Default, Hover, Pressed) |
+
+---
+
+## Design Resources
+
+- [Figma Component](https://www.figma.com/design/osmWFSHFDtSucVo3xwmk0I/Test-mintlify?node-id=1-5)
+- Frame ID: `1:5`
+- Component IDs: `1:4` (Default), `1:6` (Hover), `1:8` (Pressed)
+
+
